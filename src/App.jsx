@@ -1,10 +1,11 @@
-import "./App.css";
+import { Canvas } from "@react-three/fiber";
+import { Main } from "./components/Main";
 
 function App() {
   return (
-    <>
-      <div>hi</div>
-    </>
+    <Canvas shadows camera={{ position: [3, 3, 3] }}>
+      <Main />
+    </Canvas>
   );
 }
 
