@@ -3,7 +3,7 @@ import { Main } from "./components/Main";
 
 function App() {
   return (
-    <Canvas shadows camera={{ position: [3, 3, 3] }}>
+    <Canvas shadows camera={{ position: [-10, 15, 10] }}>
       <Main />
     </Canvas>
   );

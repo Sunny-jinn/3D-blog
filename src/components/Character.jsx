@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
-import { useGraph } from "@react-three/fiber";
+import { useFrame, useGraph } from "@react-three/fiber";
+import * as THREE from "three";
+
+const SPEED = 0.04;
 
 export function Character(props) {
   const group = useRef();
@@ -11,6 +14,7 @@ export function Character(props) {
   const { nodes } = useGraph(clone);
 
   const { actions } = useAnimations(animations, group);
+  const position = useMemo(() => props.position, []);
 
   const [animation, setAnimation] = useState(
     "CharacterArmature|CharacterArmature|CharacterArmature|Idle"
@@ -21,8 +25,27 @@ export function Character(props) {
     return () => actions[animation]?.fadeOut(0.32);
   }, [animation]);
 
+  useFrame(() => {
+    if (group.current.position.distanceTo(props.position) > 0.1) {
+      const direction = group.current.position
+        .clone()
+        .sub(props.position)
+        .normalize()
+        .multiplyScalar(SPEED);
+      group.current.position.sub(direction);
+      group.current.lookAt(props.position);
+      setAnimation(
+        "CharacterArmature|CharacterArmature|CharacterArmature|Walk"
+      );
+    } else {
+      setAnimation(
+        "CharacterArmature|CharacterArmature|CharacterArmature|Idle"
+      );
+    }
+  });
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={group} {...props} dispose={null} position={position}>
       <group name="Root_Scene">
         <group name="RootNode">
           <group
