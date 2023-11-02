@@ -59,6 +59,9 @@ export const CharacterController = (props) => {
         enabledRotations={[false, false, false]}
         lockRotations
         linearDamping={12}
+        onCollisionEnter={(e) => {
+          console.log(e.colliderObject.name);
+        }}
       >
         <group ref={character}>
           <Character animation={animation} />

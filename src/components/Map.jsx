@@ -38,12 +38,25 @@ export const Map = ({ setPosition }) => {
           <meshStandardMaterial color={"#6e6e6e"} />
         </mesh>
       </RigidBody>
-      <RigidBody colliders="trimesh" type="fixed" position={[15, 5, 5]}>
-        {/* <Text position={[15, 3, 0]} fontSize={10}>
-          Portpolio
-        </Text> */}
+      <RigidBody
+        colliders="trimesh"
+        type="fixed"
+        position={[15, 5, 5]}
+        name="testBox"
+      >
         <mesh>
           <boxGeometry args={[10, 10, 10]} />
+          <meshStandardMaterial />
+        </mesh>
+      </RigidBody>
+      <RigidBody
+        colliders="trimesh"
+        type="fixed"
+        position={[15, 0, 15]}
+        name="testSphere"
+      >
+        <mesh>
+          <sphereGeometry args={[5, 32, 32]} />
           <meshStandardMaterial />
         </mesh>
       </RigidBody>
