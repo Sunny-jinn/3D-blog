@@ -1,7 +1,7 @@
 import { CapsuleCollider, RigidBody, vec3 } from "@react-three/rapier";
 import { Character } from "./Character";
-import { CameraControls, Capsule, OrbitControls } from "@react-three/drei";
-import { useMemo, useRef, useState } from "react";
+import { CameraControls } from "@react-three/drei";
+import { useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 
 const MOVE_SPEED = 10;
@@ -16,7 +16,7 @@ export const CharacterController = (props) => {
     "CharacterArmature|CharacterArmature|CharacterArmature|Idle"
   );
 
-  useFrame((state, delta) => {
+  useFrame(() => {
     const currentPos = vec3(rigidbody.current.translation());
     const direction = props.position.clone().sub(currentPos).normalize();
 
@@ -53,11 +53,9 @@ export const CharacterController = (props) => {
   return (
     <group ref={group}>
       <CameraControls ref={controls} />
-      {/* <OrbitControls /> */}
       <RigidBody
         colliders={false}
         ref={rigidbody}
-        position={[0, 0, 0]}
         enabledRotations={[false, false, false]}
         lockRotations
         linearDamping={12}

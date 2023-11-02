@@ -1,6 +1,5 @@
 import { Canvas } from "@react-three/fiber";
 import { Main } from "./components/Main";
-import { SoftShadows } from "@react-three/drei";
 import { Suspense } from "react";
 import { Physics } from "@react-three/rapier";
 

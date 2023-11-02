@@ -1,10 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import {
-  useGLTF,
-  useAnimations,
-  CameraControls,
-  OrbitControls,
-} from "@react-three/drei";
+import React, { useEffect, useMemo, useRef } from "react";
+import { useGLTF, useAnimations } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 import { useGraph } from "@react-three/fiber";
 

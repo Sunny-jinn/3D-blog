@@ -1,5 +1,4 @@
-import { Environment, OrbitControls, useHelper } from "@react-three/drei";
-import { Character } from "./Character";
+import { Environment, useHelper } from "@react-three/drei";
 import { Map } from "./Map";
 import { useRef, useState } from "react";
 import * as THREE from "three";
@@ -13,7 +12,6 @@ export const Main = () => {
   useHelper(lightRef, THREE.DirectionalLightHelper, 10);
   return (
     <>
-      {/* <OrbitControls /> */}
       <directionalLight
         ref={lightRef}
         position={[140, 100, 140]}
@@ -27,8 +25,6 @@ export const Main = () => {
         shadow-mapSize-width={4096}
         shadow-mapSize-height={4096}
       />
-
-      {/* <pointLight position={[7, 7, 7]} castShadow /> */}
 
       <Environment preset="sunset" />
       <CharacterController
