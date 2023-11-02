@@ -3,6 +3,9 @@ import { Character } from "./Character";
 import { CameraControls } from "@react-three/drei";
 import { useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
+import { atom, useAtom } from "jotai";
+
+export const touchAtom = atom(null);
 
 const MOVE_SPEED = 10;
 
@@ -11,6 +14,8 @@ export const CharacterController = (props) => {
   const controls = useRef();
   const rigidbody = useRef();
   const character = useRef();
+
+  const [isTouched, setIsTouched] = useAtom(touchAtom);
 
   const [animation, setAnimation] = useState(
     "CharacterArmature|CharacterArmature|CharacterArmature|Idle"
@@ -61,6 +66,11 @@ export const CharacterController = (props) => {
         linearDamping={12}
         onCollisionEnter={(e) => {
           console.log(e.colliderObject.name);
+          if (e.colliderObject.name === "testSphere") {
+            setIsTouched(true);
+          } else if (e.colliderObject.name === "testBox") {
+            setIsTouched(false);
+          }
         }}
       >
         <group ref={character}>
