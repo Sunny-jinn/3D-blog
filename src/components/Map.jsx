@@ -1,3 +1,4 @@
+import { Text } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import React, { useState } from "react";
 
@@ -27,7 +28,7 @@ export const Map = ({ setPosition }) => {
       <RigidBody colliders="trimesh" type="fixed">
         <mesh
           rotation-x={-Math.PI / 2}
-          position={[0, 0, 0]}
+          position={[40, 0, 40]}
           receiveShadow
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
@@ -35,6 +36,15 @@ export const Map = ({ setPosition }) => {
         >
           <planeGeometry args={[100, 100]} />
           <meshStandardMaterial color={"#6e6e6e"} />
+        </mesh>
+      </RigidBody>
+      <RigidBody colliders="trimesh" type="fixed" position={[15, 5, 5]}>
+        {/* <Text position={[15, 3, 0]} fontSize={10}>
+          Portpolio
+        </Text> */}
+        <mesh>
+          <boxGeometry args={[10, 10, 10]} />
+          <meshStandardMaterial />
         </mesh>
       </RigidBody>
     </>

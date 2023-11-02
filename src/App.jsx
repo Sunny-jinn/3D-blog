@@ -8,7 +8,7 @@ function App() {
   return (
     <Canvas shadows camera={{ position: [-10, 15, 10] }}>
       <Suspense>
-        <Physics>
+        <Physics debug>
           <Main />
         </Physics>
       </Suspense>

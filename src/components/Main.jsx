@@ -3,6 +3,7 @@ import { Character } from "./Character";
 import { Map } from "./Map";
 import { useState } from "react";
 import * as THREE from "three";
+import { CharacterController } from "./CharacterController";
 
 export const Main = () => {
   const [position, setPosition] = useState([0, 0, 0]);
@@ -21,7 +22,7 @@ export const Main = () => {
       />
 
       <Environment preset="sunset" />
-      <Character
+      <CharacterController
         position={new THREE.Vector3(position[0], position[1], position[2])}
       />
       <Map setPosition={setPosition} />
