@@ -1,3 +1,4 @@
+import { RigidBody } from "@react-three/rapier";
 import React, { useState } from "react";
 
 export const Map = ({ setPosition }) => {
@@ -23,17 +24,19 @@ export const Map = ({ setPosition }) => {
 
   return (
     <>
-      <mesh
-        rotation-x={-Math.PI / 2}
-        position={[0, 0, 0]}
-        receiveShadow
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-      >
-        <planeGeometry args={[100, 100]} />
-        <meshStandardMaterial color={"#6e6e6e"} />
-      </mesh>
+      <RigidBody colliders="trimesh" type="fixed">
+        <mesh
+          rotation-x={-Math.PI / 2}
+          position={[0, 0, 0]}
+          receiveShadow
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+        >
+          <planeGeometry args={[100, 100]} />
+          <meshStandardMaterial color={"#6e6e6e"} />
+        </mesh>
+      </RigidBody>
     </>
   );
 };

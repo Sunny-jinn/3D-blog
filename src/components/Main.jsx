@@ -8,7 +8,7 @@ export const Main = () => {
   const [position, setPosition] = useState([0, 0, 0]);
   return (
     <>
-      <OrbitControls />
+      {/* <OrbitControls /> */}
       <directionalLight
         position={[7, 7, 7]}
         castShadow
