@@ -4,7 +4,7 @@ import { SkeletonUtils } from "three-stdlib";
 import { useFrame, useGraph } from "@react-three/fiber";
 import * as THREE from "three";
 
-const SPEED = 0.04;
+const SPEED = 0.07;
 
 export function Character(props) {
   const group = useRef();
@@ -34,9 +34,7 @@ export function Character(props) {
         .multiplyScalar(SPEED);
       group.current.position.sub(direction);
       group.current.lookAt(props.position);
-      setAnimation(
-        "CharacterArmature|CharacterArmature|CharacterArmature|Walk"
-      );
+      setAnimation("CharacterArmature|CharacterArmature|CharacterArmature|Run");
     } else {
       setAnimation(
         "CharacterArmature|CharacterArmature|CharacterArmature|Idle"

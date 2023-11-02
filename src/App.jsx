@@ -1,5 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { Main } from "./components/Main";
+import { SoftShadows } from "@react-three/drei";
 
 function App() {
   return (
