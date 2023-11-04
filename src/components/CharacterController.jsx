@@ -7,7 +7,7 @@ import { atom, useAtom } from "jotai";
 
 export const touchAtom = atom(null);
 
-const MOVE_SPEED = 10;
+const MOVE_SPEED = 1000;
 
 export const CharacterController = (props) => {
   const group = useRef();
@@ -21,15 +21,16 @@ export const CharacterController = (props) => {
     "CharacterArmature|CharacterArmature|CharacterArmature|Idle"
   );
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     const currentPos = vec3(rigidbody.current.translation());
     const direction = props.position.clone().sub(currentPos).normalize();
 
     if (currentPos.distanceTo(props.position) > 0.1) {
+      // delta는 이전 프레임 이후의 초 단위 시간임. 이는 모니터 프레임과 무관하게 속도 제정가능.
       const impulse = {
-        x: direction.x * MOVE_SPEED,
+        x: direction.x * MOVE_SPEED * delta,
         y: 0, // Y축 이동이 없다면 0으로 설정
-        z: direction.z * MOVE_SPEED,
+        z: direction.z * MOVE_SPEED * delta,
       };
       rigidbody.current.applyImpulse(impulse, true);
       character.current.lookAt(props.position);
@@ -57,7 +58,7 @@ export const CharacterController = (props) => {
 
   return (
     <group ref={group}>
-      <CameraControls ref={controls} />
+      {/* <CameraControls ref={controls} /> */}
       <RigidBody
         colliders={false}
         ref={rigidbody}
