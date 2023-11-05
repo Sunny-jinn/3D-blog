@@ -52,9 +52,9 @@ export const CharacterController = (props) => {
     // 카메라의 새로운 위치를 설정합니다.
     // playerPosition에서 Y축만 cameraHeightOffset만큼 더해줍니다.
     const newCameraPosition = new THREE.Vector3(
-      playerPosition.x - 5,
-      playerPosition.y + 12,
-      playerPosition.z + 5
+      playerPosition.x - 6,
+      playerPosition.y + 17,
+      playerPosition.z + 10
     );
 
     // 카메라의 위치를 새로운 위치로 갱신합니다.
