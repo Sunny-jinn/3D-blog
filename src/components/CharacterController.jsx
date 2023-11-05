@@ -3,9 +3,9 @@ import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { Character } from "./Character";
 import { useCharacterControls } from "../hooks/useCharacterControls";
 
-export const CharacterController = (props) => {
+export const CharacterController = () => {
   const { group, rigidbody, character, animation, handleCollisionEnter } =
-    useCharacterControls(props);
+    useCharacterControls();
 
   return (
     <group ref={group}>

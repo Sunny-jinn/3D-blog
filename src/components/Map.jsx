@@ -8,7 +8,9 @@ import { TextureLoader } from "three";
 
 import { Wall } from "./Wall";
 import font1 from "/fonts/font1.ttf";
-import { touchAtom } from "../hooks/useCharacterControls";
+import { isAutoMovingAtom, touchAtom } from "../hooks/useCharacterControls";
+
+import * as THREE from "three";
 
 export const Map = ({ setPosition }) => {
   /**
@@ -17,6 +19,7 @@ export const Map = ({ setPosition }) => {
   const [isPointerDown, setIsPointerDown] = useState(false);
   const [isTouched, setIsTouched] = useAtom(touchAtom);
   const [showText, setShowText] = useState(false);
+  const [isAutoMoving, setIsAutoMoving] = useAtom(isAutoMovingAtom);
 
   const texture = useLoader(TextureLoader, "/models/sungsimdang.png");
 
@@ -37,13 +40,15 @@ export const Map = ({ setPosition }) => {
   const AnimatedMaterial = animated("meshStandardMaterial");
 
   const handlePointerDown = (e) => {
-    setIsPointerDown(true);
-    setPosition([e.point.x, 0, e.point.z]);
+    if (!isAutoMoving) {
+      setIsPointerDown(true);
+      setPosition(new THREE.Vector3(e.point.x, 0, e.point.z));
+    }
   };
 
   const handlePointerMove = (e) => {
-    if (isPointerDown) {
-      setPosition([e.point.x, 0, e.point.z]);
+    if (isPointerDown && !isAutoMoving) {
+      setPosition(new THREE.Vector3(e.point.x, 0, e.point.z));
     }
   };
 

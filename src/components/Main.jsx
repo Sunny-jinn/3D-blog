@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { CharacterController } from "./CharacterController";
 import { atom, useAtom } from "jotai";
 
-export const positionAtom = atom([55, 0, 55]);
+export const positionAtom = atom(new THREE.Vector3(55, 0, 55));
 
 export const Main = () => {
   const [position, setPosition] = useAtom(positionAtom);
@@ -31,9 +31,7 @@ export const Main = () => {
       />
 
       <Environment preset="sunset" />
-      <CharacterController
-        position={new THREE.Vector3(position[0], position[1], position[2])}
-      />
+      <CharacterController />
       <Map setPosition={setPosition} />
     </>
   );

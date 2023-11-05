@@ -4,12 +4,14 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { vec3 } from "@react-three/rapier";
 import * as THREE from "three";
 import { atom, useAtom } from "jotai";
+import { positionAtom } from "../components/Main";
 
 const MOVE_SPEED = 1500;
 
 export const touchAtom = atom(null);
+export const isAutoMovingAtom = atom(false);
 
-export const useCharacterControls = (props) => {
+export const useCharacterControls = () => {
   const { camera } = useThree();
   const rigidbody = useRef();
   const character = useRef();
@@ -18,6 +20,9 @@ export const useCharacterControls = (props) => {
   const [animation, setAnimation] = useState(
     "CharacterArmature|CharacterArmature|CharacterArmature|Idle"
   );
+  const [isAutoMoving, setIsAutoMoving] = useAtom(isAutoMovingAtom);
+
+  const [position, setPosition] = useAtom(positionAtom);
 
   function moveCharacterTo(target, lookAtTarget = true, delta) {
     const direction = target
@@ -60,31 +65,22 @@ export const useCharacterControls = (props) => {
       currentPos.z >= 70 &&
       currentPos.z <= 80
     ) {
-      setTargetPosition(new THREE.Vector3(56, 0, 56));
+      setPosition(new THREE.Vector3(56, 0, 56));
+      setIsAutoMoving(true);
     }
 
-    if (targetPosition) {
-      if (!moveCharacterTo(targetPosition, true, delta)) {
-        //
-      } else {
-        setTargetPosition(null);
+    if (isAutoMoving) {
+      const reached = moveCharacterTo(position, true, delta);
+      if (reached) {
+        setIsAutoMoving(false); // 도달했으면 자동 이동 종료
       }
+    } else {
+      // 사용자 입력에 의한 이동은 자동 이동 중이 아닐 때만 허용
+      // moveCharacterTo(position, true, delta);
     }
 
-    if (!moveCharacterTo(props.position, true, delta)) {
-      //   const impulse = {
-      //     x: direction.x * MOVE_SPEED * delta,
-      //     y: 0,
-      //     z: direction.z * MOVE_SPEED * delta,
-      //   };
-      //   rigidbody.current.applyImpulse(impulse, true);
-      //   character.current.lookAt(props.position);
-      //   setAnimation("CharacterArmature|CharacterArmature|CharacterArmature|Run");
-      // } else {
-      //   setAnimation(
-      //     "CharacterArmature|CharacterArmature|CharacterArmature|Idle"
-      //   );
-      //   rigidbody.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    if (!moveCharacterTo(position, true, delta)) {
+      //
     }
 
     const playerPosition = vec3(rigidbody.current.translation());
