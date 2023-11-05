@@ -3,9 +3,12 @@ import { Map } from "./Map";
 import { useRef, useState } from "react";
 import * as THREE from "three";
 import { CharacterController } from "./CharacterController";
+import { atom, useAtom } from "jotai";
+
+export const positionAtom = atom([55, 0, 55]);
 
 export const Main = () => {
-  const [position, setPosition] = useState([55, 0, 55]);
+  const [position, setPosition] = useAtom(positionAtom);
 
   const lightRef = useRef();
 
