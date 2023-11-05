@@ -4,6 +4,8 @@ import { useAtom } from "jotai";
 import React, { useState } from "react";
 import { touchAtom } from "./CharacterController";
 import { useSpring, a, animated } from "@react-spring/three";
+import { useLoader } from "@react-three/fiber";
+import { TextureLoader } from "three";
 
 export const Map = ({ setPosition }) => {
   /**
@@ -12,6 +14,8 @@ export const Map = ({ setPosition }) => {
   const [isPointerDown, setIsPointerDown] = useState(false);
   const [isTouched, setIsTouched] = useAtom(touchAtom);
   const [showText, setShowText] = useState(false);
+
+  const texture = useLoader(TextureLoader, "/models/sungsimdang.png");
 
   // 애니메이션의 opacity 값을 제어합니다.
   const { opacity } = useSpring({
@@ -56,7 +60,7 @@ export const Map = ({ setPosition }) => {
           onPointerUp={handlePointerUp}
         >
           <planeGeometry args={[100, 100]} />
-          <meshStandardMaterial color={"#6e6e6e"} />
+          <meshStandardMaterial map={texture} />
         </mesh>
       </RigidBody>
       <RigidBody
