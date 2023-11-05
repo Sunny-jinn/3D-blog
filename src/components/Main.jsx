@@ -1,17 +1,18 @@
-import { Environment, useHelper } from "@react-three/drei";
+import { Environment, Stats, useHelper } from "@react-three/drei";
 import { Map } from "./Map";
 import { useRef, useState } from "react";
 import * as THREE from "three";
 import { CharacterController } from "./CharacterController";
 
 export const Main = () => {
-  const [position, setPosition] = useState([0, 0, 0]);
+  const [position, setPosition] = useState([55, 0, 55]);
 
   const lightRef = useRef();
 
   useHelper(lightRef, THREE.DirectionalLightHelper, 10);
   return (
     <>
+      <Stats />
       <directionalLight
         ref={lightRef}
         position={[140, 100, 140]}

@@ -8,11 +8,10 @@ import * as THREE from "three";
 
 export const touchAtom = atom(null);
 
-const MOVE_SPEED = 1000;
+const MOVE_SPEED = 2500;
 
 export const CharacterController = (props) => {
   const group = useRef();
-  const controls = useRef();
   const rigidbody = useRef();
   const character = useRef();
 
@@ -71,11 +70,11 @@ export const CharacterController = (props) => {
 
   return (
     <group ref={group}>
-      {/* <CameraControls ref={controls} /> */}
       <RigidBody
         colliders={false}
         ref={rigidbody}
         enabledRotations={[false, false, false]}
+        position={[55, 0, 55]}
         lockRotations
         linearDamping={12}
         onCollisionEnter={(e) => {

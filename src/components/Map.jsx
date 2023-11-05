@@ -6,6 +6,7 @@ import { touchAtom } from "./CharacterController";
 import { useSpring, a, animated } from "@react-spring/three";
 import { useLoader } from "@react-three/fiber";
 import { TextureLoader } from "three";
+import { Wall } from "./Wall";
 
 export const Map = ({ setPosition }) => {
   /**
@@ -53,17 +54,30 @@ export const Map = ({ setPosition }) => {
       <RigidBody colliders="trimesh" type="fixed">
         <mesh
           rotation-x={-Math.PI / 2}
-          position={[40, 0, 40]}
+          position={[100, 0, 100]}
           receiveShadow
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
         >
-          <planeGeometry args={[100, 100]} />
+          <planeGeometry args={[200, 200]} />
           <meshStandardMaterial map={texture} />
         </mesh>
       </RigidBody>
-      <RigidBody
+
+      {/* 위쪽 벽 */}
+      <Wall position={[100, 0, 49]} args={[100, 5, 2]} />
+
+      {/* 왼쪽 벽 */}
+      <Wall position={[49, 0, 100]} args={[2, 5, 100]} />
+
+      {/* 오른쪽 벽 */}
+      <Wall position={[100, 0, 151]} args={[100, 5, 2]} />
+
+      {/* 아래쪽 벽 */}
+      <Wall position={[151, 0, 100]} args={[2, 5, 100]} />
+
+      {/* <RigidBody
         colliders="trimesh"
         type="fixed"
         position={[15, 5, 5]}
@@ -90,7 +104,7 @@ export const Map = ({ setPosition }) => {
           HI
           <AnimatedMaterial color="#000" opacity={opacity} transparent />
         </Text>
-      )}
+      )} */}
     </>
   );
 };
