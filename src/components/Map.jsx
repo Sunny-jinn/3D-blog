@@ -21,7 +21,7 @@ export const Map = ({ setPosition }) => {
   const [showText, setShowText] = useState(false);
   const [isAutoMoving, setIsAutoMoving] = useAtom(isAutoMovingAtom);
 
-  const texture = useLoader(TextureLoader, "/models/sungsimdang.png");
+  const texture = useLoader(TextureLoader, "/models/back7.png");
 
   // 애니메이션의 opacity 값을 제어합니다.
   const { opacity } = useSpring({
@@ -68,6 +68,12 @@ export const Map = ({ setPosition }) => {
           onPointerUp={handlePointerUp}
         >
           <planeGeometry args={[200, 200]} />
+          <meshStandardMaterial map={texture} />
+        </mesh>
+      </RigidBody>
+      <RigidBody colliders="trimesh" type="fixed">
+        <mesh position={[100, -2, 100]} rotation-x={-Math.PI / 2}>
+          <planeGeometry args={[400, 400]} />
           <meshStandardMaterial map={texture} />
         </mesh>
       </RigidBody>

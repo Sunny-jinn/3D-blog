@@ -19,6 +19,7 @@ export const Main = () => {
       <directionalLight
         ref={lightRef}
         position={[140, 100, 140]}
+        intensity={2}
         castShadow
         shadow-camera-left={-70} // X축 최소값, 평면의 왼쪽 끝 이하로 설정
         shadow-camera-right={140} // X축 최대값, 평면의 오른쪽 끝 이상으로 설정
@@ -26,11 +27,12 @@ export const Main = () => {
         shadow-camera-bottom={-70} // Z축 최소값, 평면의 하단 끝 이하로 설정
         shadow-camera-near={1} // near bound
         shadow-camera-far={400} // far bound
-        shadow-mapSize-width={4096}
-        shadow-mapSize-height={4096}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
       />
+      <directionalLight position={[-140, 100, -140]} intensity={0.5} />
 
-      <Environment preset="sunset" />
+      {/* <Environment preset="sunset" /> */}
       <CharacterController />
       <Map setPosition={setPosition} />
     </>
