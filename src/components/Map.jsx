@@ -1,14 +1,18 @@
 import { Text } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { useAtom } from "jotai";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSpring, a, animated } from "@react-spring/three";
 import { useLoader } from "@react-three/fiber";
 import { TextureLoader } from "three";
 
 import { Wall } from "./Wall";
 import font1 from "/fonts/font1.ttf";
-import { isAutoMovingAtom, touchAtom } from "../hooks/useCharacterControls";
+import {
+  isAutoMovingAtom,
+  isFirstTouchAtom,
+  touchAtom,
+} from "../hooks/useCharacterControls";
 
 import * as THREE from "three";
 
@@ -17,9 +21,25 @@ export const Map = ({ setPosition }) => {
    * 꾹 누르고 있을 때도 이동할 수 있게 함.
    */
   const [isPointerDown, setIsPointerDown] = useState(false);
-  const [isTouched, setIsTouched] = useAtom(touchAtom);
   const [showText, setShowText] = useState(false);
+  const [isTouched, setIsTouched] = useAtom(touchAtom);
   const [isAutoMoving, setIsAutoMoving] = useAtom(isAutoMovingAtom);
+  const [isFirstTouch, setIsFirstTouch] = useAtom(isFirstTouchAtom);
+
+  const [startAnimation, setStartAnimation] = useState(false);
+
+  const [animatedPosition, setAnimatedPosition] = useSpring(() => ({
+    position: [0, -12, 0], // 시작 위치
+    from: { position: [0, -10, 0] }, // 끝 위치 (아래에서 시작)
+    config: { tension: 170, friction: 26, duration: 2000 },
+    reset: true, // 컴포넌트가 렌더링될 때마다 애니메이션을 리셋합니다.
+  }));
+
+  useEffect(() => {
+    if (isFirstTouch) {
+      setAnimatedPosition.start({ position: [0, 0, 0] }); // 목표 위치로 애니메이션 시작
+    }
+  }, [isFirstTouch, setAnimatedPosition]);
 
   const texture = useLoader(TextureLoader, "/models/back7.png");
 
@@ -72,9 +92,9 @@ export const Map = ({ setPosition }) => {
         </mesh>
       </RigidBody>
       <RigidBody colliders="trimesh" type="fixed">
-        <mesh position={[100, -2, 100]} rotation-x={-Math.PI / 2}>
+        <mesh position={[100, -10, 100]} rotation-x={-Math.PI / 2}>
           <planeGeometry args={[400, 400]} />
-          <meshStandardMaterial map={texture} />
+          <meshStandardMaterial map={texture} opacity={1} />
         </mesh>
       </RigidBody>
 
@@ -117,6 +137,15 @@ export const Map = ({ setPosition }) => {
           안녕하세용
           <AnimatedMaterial color="#ffff00" opacity={opacity} transparent />
         </Text>
+      )}
+
+      {isFirstTouch && (
+        <RigidBody colliders="trimesh" type="fixed" position={[75, 2.5, 75]}>
+          <a.mesh position={animatedPosition.position}>
+            <boxGeometry args={[5, 5, 5]} />
+            <meshStandardMaterial color={"red"} />
+          </a.mesh>
+        </RigidBody>
       )}
     </>
   );

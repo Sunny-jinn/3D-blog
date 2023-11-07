@@ -10,19 +10,27 @@ const MOVE_SPEED = 1500;
 
 export const touchAtom = atom(null);
 export const isAutoMovingAtom = atom(false);
+export const isFirstTouchAtom = atom(false);
+
+const isInScope = (x, z, min, max) => {
+  return x >= min && x <= max && z >= min && z <= max;
+};
 
 export const useCharacterControls = () => {
   const { camera } = useThree();
   const rigidbody = useRef();
   const character = useRef();
   const group = useRef();
-  const [isTouched, setIsTouched] = useAtom(touchAtom);
+
   const [animation, setAnimation] = useState(
     "CharacterArmature|CharacterArmature|CharacterArmature|Idle"
   );
-  const [isAutoMoving, setIsAutoMoving] = useAtom(isAutoMovingAtom);
+  const [firstTouch, setFirstTouch] = useState(false);
 
+  const [isTouched, setIsTouched] = useAtom(touchAtom);
+  const [isAutoMoving, setIsAutoMoving] = useAtom(isAutoMovingAtom);
   const [position, setPosition] = useAtom(positionAtom);
+  const [isFirstTouch, setIsFirstTouch] = useAtom(isFirstTouchAtom);
 
   function moveCharacterTo(target, lookAtTarget = true, delta) {
     const direction = target
@@ -33,16 +41,34 @@ export const useCharacterControls = () => {
 
     if (distance > 0.1) {
       // 0.1은 캐릭터가 목표에 '충분히' 가까워졌는지를 결정하는 임계값입니다.
-      const impulse = {
-        x: direction.x * MOVE_SPEED * delta,
-        y: 0, // Y축 이동은 없음
-        z: direction.z * MOVE_SPEED * delta,
-      };
-      rigidbody.current.applyImpulse(impulse, true);
-      if (lookAtTarget) {
-        character.current.lookAt(target);
+      if (isAutoMoving) {
+        // 자동으로 움직일 때 좀 느리고 걷게
+        const impulse = {
+          x: ((direction.x * MOVE_SPEED) / 3) * delta,
+          y: 0, // Y축 이동은 없음
+          z: ((direction.z * MOVE_SPEED) / 3) * delta,
+        };
+        rigidbody.current.applyImpulse(impulse, true);
+        if (lookAtTarget) {
+          character.current.lookAt(target);
+        }
+        setAnimation(
+          "CharacterArmature|CharacterArmature|CharacterArmature|Walk"
+        );
+      } else {
+        const impulse = {
+          x: direction.x * MOVE_SPEED * delta,
+          y: 0, // Y축 이동은 없음
+          z: direction.z * MOVE_SPEED * delta,
+        };
+        rigidbody.current.applyImpulse(impulse, true);
+        if (lookAtTarget) {
+          character.current.lookAt(target);
+        }
+        setAnimation(
+          "CharacterArmature|CharacterArmature|CharacterArmature|Run"
+        );
       }
-      setAnimation("CharacterArmature|CharacterArmature|CharacterArmature|Run");
     } else {
       // 목표 위치에 도달하면 이동 로직을 정지합니다.
       setAnimation(
@@ -54,19 +80,14 @@ export const useCharacterControls = () => {
     return false;
   }
 
-  const [targetPosition, setTargetPosition] = useState(null);
-
   useFrame((state, delta) => {
     const currentPos = vec3(rigidbody.current.translation());
 
-    if (
-      currentPos.x >= 70 &&
-      currentPos.x <= 80 &&
-      currentPos.z >= 70 &&
-      currentPos.z <= 80
-    ) {
-      setPosition(new THREE.Vector3(56, 0, 56));
+    if (isInScope(currentPos.x, currentPos.z, 70, 80) && !firstTouch) {
+      setPosition(new THREE.Vector3(60, 0, 75));
       setIsAutoMoving(true);
+      setIsFirstTouch(true);
+      setFirstTouch(true);
     }
 
     if (isAutoMoving) {
