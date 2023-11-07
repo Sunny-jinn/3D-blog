@@ -108,7 +108,7 @@ export const useCharacterControls = () => {
 
     const newCameraPosition = new THREE.Vector3(
       playerPosition.x - 6,
-      playerPosition.y + 17,
+      playerPosition.y + 20,
       playerPosition.z + 10
     );
 

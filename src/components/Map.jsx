@@ -41,7 +41,7 @@ export const Map = ({ setPosition }) => {
     }
   }, [isFirstTouch, setAnimatedPosition]);
 
-  const texture = useLoader(TextureLoader, "/models/back7.png");
+  const texture = useLoader(TextureLoader, "/models/back11.png");
 
   // 애니메이션의 opacity 값을 제어합니다.
   const { opacity } = useSpring({
