@@ -15,6 +15,7 @@ import {
 } from "../hooks/useCharacterControls";
 
 import * as THREE from "three";
+import { Fireworks } from "./Fireworks";
 
 export const Map = ({ setPosition }) => {
   /**
@@ -29,15 +30,25 @@ export const Map = ({ setPosition }) => {
   const [isFirstTouch, setIsFirstTouch] = useAtom(isFirstTouchAtom);
 
   const [animatedPosition, setAnimatedPosition] = useSpring(() => ({
-    position: [0, -12, 0], // 시작 위치
-    from: { position: [0, -10, 0] }, // 끝 위치 (아래에서 시작)
-    config: { tension: 170, friction: 26, duration: 2000 },
-    reset: true, // 컴포넌트가 렌더링될 때마다 애니메이션을 리셋합니다.
+    position: [0, -12, 0], // 시작 위치: 바닥 아래 숨겨진 상태
+    from: { position: [0, -10, 0] }, // 끝 위치: 바닥 바로 위 숨겨진 상태
+    config: {
+      mass: 1, // 물체의 질량
+      tension: 200, // 스프링의 긴장도
+      friction: 5, // 마찰력
+      bounce: 0.8, // 튕겨나오는 정도 (0에서 1 사이, 1이 완전 탄성 충돌)
+      duration: undefined, // 스프링 물리를 사용할 때는 duration을 정의하지 않음
+    },
+    reset: true, // 컴포넌트가 리렌더링될 때마다 애니메이션을 리셋
   }));
 
   useEffect(() => {
     if (isFirstTouch) {
-      setAnimatedPosition.start({ position: [0, 0, 0] }); // 목표 위치로 애니메이션 시작
+      const timeoutId = setTimeout(() => {
+        setAnimatedPosition.start({
+          position: [0, 0, 0],
+        });
+      }, 1800); // 1초 지연
     }
   }, [isFirstTouch, setAnimatedPosition]);
 
@@ -45,8 +56,8 @@ export const Map = ({ setPosition }) => {
 
   // 애니메이션의 opacity 값을 제어합니다.
   const { opacity } = useSpring({
-    opacity: isTouched ? 1 : 0,
-    config: { duration: 2000 },
+    scale: isTouched ? 1 : 0,
+    config: { duration: 4000 },
     onRest: () => {
       // opacity가 0이 될 때 컴포넌트를 더 이상 렌더링하지 않도록 설정합니다.
       if (!isTouched) setShowText(false);
@@ -153,6 +164,8 @@ export const Map = ({ setPosition }) => {
         </RigidBody>
       )}
 
+      {/* <Fireworks position={[80, 5, 55]} /> */}
+
       <RigidBody colliders="trimesh" type="fixed" position={[64, 0, 60]}>
         <mesh>
           <boxGeometry args={[2, 20, 2]} />
@@ -178,7 +191,6 @@ export const Map = ({ setPosition }) => {
           sensor
           onIntersectionEnter={() => {
             setIsTouched(true);
-            console.log("hi");
           }}
         />
       </RigidBody>
