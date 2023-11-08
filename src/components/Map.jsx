@@ -1,7 +1,7 @@
 import { Text } from "@react-three/drei";
-import { RigidBody } from "@react-three/rapier";
+import { CuboidCollider, RigidBody, vec3 } from "@react-three/rapier";
 import { useAtom } from "jotai";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSpring, a, animated } from "@react-spring/three";
 import { useLoader } from "@react-three/fiber";
 import { TextureLoader } from "three";
@@ -20,13 +20,13 @@ export const Map = ({ setPosition }) => {
   /**
    * 꾹 누르고 있을 때도 이동할 수 있게 함.
    */
+  const rigidbody = useRef();
+
   const [isPointerDown, setIsPointerDown] = useState(false);
   const [showText, setShowText] = useState(false);
   const [isTouched, setIsTouched] = useAtom(touchAtom);
   const [isAutoMoving, setIsAutoMoving] = useAtom(isAutoMovingAtom);
   const [isFirstTouch, setIsFirstTouch] = useAtom(isFirstTouchAtom);
-
-  const [startAnimation, setStartAnimation] = useState(false);
 
   const [animatedPosition, setAnimatedPosition] = useSpring(() => ({
     position: [0, -12, 0], // 시작 위치
@@ -140,13 +140,48 @@ export const Map = ({ setPosition }) => {
       )}
 
       {isFirstTouch && (
-        <RigidBody colliders="trimesh" type="fixed" position={[75, 2.5, 75]}>
+        <RigidBody
+          ref={rigidbody}
+          colliders="trimesh"
+          type="fixed"
+          position={[75, 2.5, 75]}
+        >
           <a.mesh position={animatedPosition.position}>
             <boxGeometry args={[5, 5, 5]} />
             <meshStandardMaterial color={"red"} />
           </a.mesh>
         </RigidBody>
       )}
+
+      <RigidBody colliders="trimesh" type="fixed" position={[64, 0, 60]}>
+        <mesh>
+          <boxGeometry args={[2, 20, 2]} />
+          <meshStandardMaterial color={"#ffd754"} transparent opacity={0.7} />
+        </mesh>
+      </RigidBody>
+      <RigidBody colliders="trimesh" type="fixed" position={[51, 0, 60]}>
+        <mesh>
+          <boxGeometry args={[2, 20, 2]} />
+          <meshStandardMaterial color={"#ffd754"} transparent opacity={0.7} />
+        </mesh>
+      </RigidBody>
+      <RigidBody colliders="trimesh" type="fixed" position={[57.5, 11, 60]}>
+        <mesh>
+          <boxGeometry args={[15, 2, 2]} />
+          <meshStandardMaterial color={"#ffd754"} transparent opacity={0.7} />
+        </mesh>
+      </RigidBody>
+
+      <RigidBody position={[60, 0, 60]} colliders="trimesh" type="fixed">
+        <CuboidCollider
+          args={[5, 5, 1]}
+          sensor
+          onIntersectionEnter={() => {
+            setIsTouched(true);
+            console.log("hi");
+          }}
+        />
+      </RigidBody>
     </>
   );
 };
